@@ -1,0 +1,115 @@
+<app-header></app-header>
+<div class="container" style="color:#fff8f8 "> 
+  <div class="card-body py-5 mt-3" style=" background-color:#008080">
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-lg-8">
+
+        <h2 class="fw-bold mb-5 text-center">Sale Management</h2>
+        <form [formGroup]="form" (ngSubmit)="save()" name="main-form">
+
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form3Example3">Product Id:</label>
+            <select formControlName="id" class="form-control" (change)="productChange()">
+              <option value="-1" selected>Select One </option>
+              <option *ngFor="let item of products; let i = index" [value]="i">{{item.productName}}</option>
+            </select>
+            <div *ngIf="f['productid'].invalid && (f['productid'].touched || f['productid'].dirty || submitted) "
+              class="mt-2 alert alert-danger">
+              <div *ngIf="f['productid'].errors?.required ">Product id is required.</div>
+
+            </div>
+          </div>
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form3Example3">Available Quantity:</label>
+            <input type="text" disabled="true" [value]="selectedProduct.quantity" id="form3Example3"
+              class="form-control" />
+          </div>
+          <div class="form-outline mb-4">
+            <label class="form-label" for="form3Example3">Sell Quantity:</label>
+            <input type="number" id="form3Example3" class="form-control" formControlName="quantity" />
+            <div *ngIf="f['quantity'].invalid &&  (f['quantity'].touched || f['quantity'].dirty || submitted)"
+              class="mt-2 alert alert-danger">
+              <div *ngIf="f['quantity'].errors?.required">quantity is required.</div>
+            </div>
+
+          </div>
+
+          <button type="button" style="width: 20rem; background-color:  #eaeaf1 ; color:#380bdb" (click)="addProduct()" class="btn btn-success btn-block mb-4"> Add
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Section: Design Block -->
+
+  <div class="row">
+    <div class="col-md-3 mt-3">
+      <form [formGroup]="form">
+        <select formControlName="invoiceNo" (change)="getInvoices()">
+          <option value="-1" selected>Select Invoice No </option>
+          <option *ngFor="let item of invoiceIndexs" [value]="item.invoiceNo">{{'Invoice no: '+ item.invoiceNo}}
+          </option>
+        </select>
+      </form>
+    </div>
+  </div>
+  <div id="printableInvoice">
+    <style media="print">
+      table,
+      td,
+      th {
+        border: 1px solid;
+        padding: 5px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      @media print {
+         #action{
+          display: none;
+         }
+      }
+    </style>
+    <table class="mt-3" style=" background-color:#008080">
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+          <th id="action">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of saleProducts; let i = index">
+          <td>{{item.productName}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.price*item.quantity}}</td>
+          <td id="action" class="text-center">
+            <button type="button" class="btn btn-danger" (click)="removeItem(i)">
+              <i class="fa fa-trash"></i>
+            </button>
+  
+          </td>
+  
+          <!-- <td>
+          <button type="button" class="btn btn-warning">Update</button>
+          <button type="button" class="btn btn-danger">Delete</button>
+  
+        </td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <br />
+  <br />
+  <button type="button" class="btn btn-success" (click)="getnerateInvoice()">Generate Invoice</button> &nbsp;&nbsp;
+  <button type="button" class="btn btn-primary ml-3" (click)="printInvoice()">Print Invoice</button>
+  <br />
+  <br />
+</div>
